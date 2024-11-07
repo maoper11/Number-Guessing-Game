@@ -2,7 +2,7 @@
 PSQL="psql -X --username=freecodecamp --dbname=guess_number --tuples-only -c"
 
 NUMBER_TO_GUESS=$(( RANDOM % 1000 ))
-echo "The number to guess is $NUMBER_TO_GUESS"
+#echo "The number to guess is $NUMBER_TO_GUESS"
 
 if [[ ! $1 ]]
  then
