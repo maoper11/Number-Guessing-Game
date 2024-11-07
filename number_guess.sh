@@ -20,7 +20,10 @@ then
   # insert new user
   INSERT_USER_RESULT=$($PSQL "INSERT INTO users(username) VALUES('$USERNAME')") 
 else
-  echo "Welcome back, $USERNAME! You have played <games_played> games, and your best game took <best_game> guesses."
+  USER_ID=$($PSQL "SELECT user_id FROM users WHERE username = '$USERNAME'") 
+  USER_GAMES_PLAYED=$($PSQL "SELECT COUNT(*) FROM games WHERE user_id = $USER_ID") 
+  USER_BEST_GAME=$($PSQL "SELECT attempts FROM games WHERE user_id = $USER_ID ORDER BY attempts ASC LIMIT 1") 
+  echo "Welcome back, $USERNAME! You have played $USER_GAMES_PLAYED games, and your best game took $USER_BEST_GAME guesses."
 fi
 
 USER_ID=$($PSQL "SELECT user_id FROM users WHERE username = '$USERNAME'") 
@@ -41,7 +44,8 @@ do
   elif (( NUMBER_ATTEMPT < NUMBER_TO_GUESS ))
   then
     echo "It's higher than that, guess again:"
-  else
+  elif (( NUMBER_ATTEMPT > NUMBER_TO_GUESS ))
+  then
     echo "It's lower than that, guess again:"      
   fi
 done
